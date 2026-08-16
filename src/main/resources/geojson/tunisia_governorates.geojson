@@ -1,0 +1,380 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Tunis",
+        "name_ar": "تونس",
+        "center_lat": 36.8025,
+        "center_lon": 10.1839,
+        "population": 1150000,
+        "area_km2": 1965.0
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[10.0, 36.9], [10.4, 36.9], [10.4, 36.7], [10.0, 36.7], [10.0, 36.9]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Ariana",
+        "name_ar": "أريانة",
+        "center_lat": 36.8625,
+        "center_lon": 10.0925,
+        "population": 900000,
+        "area_km2": 480.0
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[10.0, 36.95], [10.2, 36.95], [10.2, 36.8], [10.0, 36.8], [10.0, 36.95]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Ben Arous",
+        "name_ar": "بن عروس",
+        "center_lat": 36.7333,
+        "center_lon": 10.2333,
+        "population": 600000,
+        "area_km2": 200.0
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[10.2, 36.8], [10.4, 36.8], [10.4, 36.6], [10.2, 36.6], [10.2, 36.8]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Manouba",
+        "name_ar": "منوبة",
+        "center_lat": 36.5000,
+        "center_lon": 9.7000,
+        "population": 350000,
+        "area_km2": 1313.0
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[9.5, 36.7], [9.9, 36.7], [9.9, 36.3], [9.5, 36.3], [9.5, 36.7]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Nabeul",
+        "name_ar": "نابل",
+        "center_lat": 36.4500,
+        "center_lon": 10.3500,
+        "population": 500000,
+        "area_km2": 1940.0
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[10.2, 36.9], [10.6, 36.9], [10.6, 36.2], [10.2, 36.2], [10.2, 36.9]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Sousse",
+        "name_ar": "سوسة",
+        "center_lat": 35.8200,
+        "center_lon": 10.1000,
+        "population": 450000,
+        "area_km2": 2480.0
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[10.0, 36.2], [10.3, 36.2], [10.3, 35.5], [10.0, 35.5], [10.0, 36.2]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Monastir",
+        "name_ar": "المنستير",
+        "center_lat": 35.5000,
+        "center_lon": 10.8000,
+        "population": 350000,
+        "area_km2": 2860.0
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[10.3, 36.2], [10.6, 36.2], [10.6, 35.2], [10.3, 35.2], [10.3, 36.2]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Mahdia",
+        "name_ar": "المهدية",
+        "center_lat": 35.2500,
+        "center_lon": 10.9000,
+        "population": 250000,
+        "area_km2": 1717.0
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[10.6, 35.2], [10.9, 35.2], [10.9, 35.0], [10.6, 35.0], [10.6, 35.2]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Sfax",
+        "name_ar": "صفاقس",
+        "center_lat": 34.7500,
+        "center_lon": 10.7500,
+        "population": 700000,
+        "area_km2": 3439.0
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[10.6, 35.0], [10.9, 35.0], [10.9, 34.5], [10.6, 34.5], [10.6, 35.0]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Djerba",
+        "name_ar": "جربة",
+        "center_lat": 33.8500,
+        "center_lon": 10.3000,
+        "population": 150000,
+        "area_km2": 2050.0
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[10.1, 34.5], [10.5, 34.5], [10.5, 33.7], [10.1, 33.7], [10.1, 34.5]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Kairouan",
+        "name_ar": "القيروان",
+        "center_lat": 35.6700,
+        "center_lon": 10.1000,
+        "population": 350000,
+        "area_km2": 4116.0
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[9.9, 36.2], [10.3, 36.2], [10.3, 35.2], [9.9, 35.2], [9.9, 36.2]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Kasserine",
+        "name_ar": "القصرين",
+        "center_lat": 35.1700,
+        "center_lon": 8.8300,
+        "population": 300000,
+        "area_km2": 6655.0
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[8.5, 35.5], [9.2, 35.5], [9.2, 34.8], [8.5, 34.8], [8.5, 35.5]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Gabes",
+        "name_ar": "قابس",
+        "center_lat": 33.9000,
+        "center_lon": 9.9000,
+        "population": 350000,
+        "area_km2": 6472.0
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[9.5, 34.5], [10.1, 34.5], [10.1, 33.5], [9.5, 33.5], [9.5, 34.5]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Medenine",
+        "name_ar": "مدنين",
+        "center_lat": 33.3500,
+        "center_lon": 10.5000,
+        "population": 300000,
+        "area_km2": 6472.0
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[10.1, 33.7], [10.5, 33.7], [10.5, 33.0], [10.1, 33.0], [10.1, 33.7]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Tataouine",
+        "name_ar": "تطاوين",
+        "center_lat": 32.9500,
+        "center_lon": 9.7500,
+        "population": 200000,
+        "area_km2": 10124.0
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[9.5, 33.5], [10.1, 33.5], [10.1, 32.5], [9.5, 32.5], [9.5, 33.5]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Kef",
+        "name_ar": "الكاف",
+        "center_lat": 36.1500,
+        "center_lon": 8.7000,
+        "population": 250000,
+        "area_km2": 2494.0
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[8.5, 36.5], [9.0, 36.5], [9.0, 35.8], [8.5, 35.8], [8.5, 36.5]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Bizerte",
+        "name_ar": "بنزرت",
+        "center_lat": 37.2500,
+        "center_lon": 9.8500,
+        "population": 300000,
+        "area_km2": 1536.0
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[9.5, 37.0], [10.2, 37.0], [10.2, 36.8], [9.5, 36.8], [9.5, 37.0]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Beja",
+        "name_ar": "باجة",
+        "center_lat": 36.7000,
+        "center_lon": 9.2500,
+        "population": 250000,
+        "area_km2": 4268.0
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[9.0, 37.0], [9.5, 37.0], [9.5, 36.5], [9.0, 36.5], [9.0, 37.0]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Jendouba",
+        "name_ar": "جندوبة",
+        "center_lat": 36.9500,
+        "center_lon": 8.8000,
+        "population": 250000,
+        "area_km2": 2421.0
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[8.5, 37.2], [9.0, 37.2], [9.0, 36.8], [8.5, 36.8], [8.5, 37.2]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Siliana",
+        "name_ar": "سليانة",
+        "center_lat": 35.7000,
+        "center_lon": 9.4000,
+        "population": 250000,
+        "area_km2": 4874.0
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[9.0, 36.2], [9.5, 36.2], [9.5, 35.5], [9.0, 35.5], [9.0, 36.2]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Kasserine",
+        "name_ar": "القصرين",
+        "center_lat": 35.1700,
+        "center_lon": 8.8300,
+        "population": 300000,
+        "area_km2": 6655.0
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[8.5, 35.5], [9.2, 35.5], [9.2, 34.8], [8.5, 34.8], [8.5, 35.5]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Sidi Bouzid",
+        "name_ar": "سيدي بوزيد",
+        "center_lat": 35.0500,
+        "center_lon": 9.4500,
+        "population": 250000,
+        "area_km2": 4512.0
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[9.0, 35.5], [9.5, 35.5], [9.5, 34.8], [9.0, 34.8], [9.0, 35.5]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Gafsa",
+        "name_ar": "قفصة",
+        "center_lat": 34.4000,
+        "center_lon": 8.8000,
+        "population": 300000,
+        "area_km2": 6316.0
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[8.5, 35.0], [9.2, 35.0], [9.2, 34.0], [8.5, 34.0], [8.5, 35.0]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Tozeur",
+        "name_ar": "توزر",
+        "center_lat": 33.9500,
+        "center_lon": 8.0000,
+        "population": 150000,
+        "area_km2": 5246.0
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[7.8, 34.5], [8.5, 34.5], [8.5, 33.5], [7.8, 33.5], [7.8, 34.5]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Kebili",
+        "name_ar": "القبلي",
+        "center_lat": 33.7500,
+        "center_lon": 9.0000,
+        "population": 100000,
+        "area_km2": 5846.0
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[8.5, 34.0], [9.2, 34.0], [9.2, 33.5], [8.5, 33.5], [8.5, 34.0]]]
+      }
+    }
+  ]
+}

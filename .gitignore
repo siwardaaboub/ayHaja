@@ -1,0 +1,7 @@
+﻿target/
+node_modules/
+.env
+*.log
+
+frontend/dist/
+node_modules/
