@@ -87,21 +87,19 @@ public class MapService {
                 .build();
     }
 
-    public GovernorateDetailResponse getGovernorateDetail(UUID id) {
-        GovernorateResponse governorate = getGovernorateById(id);
-
-        ClimateDataResponse currentWeather = climateDataService.getCurrentWeather(
-                id, governorate.getName(), governorate.getCenterLat(), governorate.getCenterLon());
-
-        List<ClimateForecastResponse> forecasts = climateDataService.getForecasts(
-                id, governorate.getName(), governorate.getCenterLat(), governorate.getCenterLon(), 7);
-
-        return GovernorateDetailResponse.builder()
-                .governorate(governorate)
-                .currentWeather(currentWeather)
-                .forecasts(forecasts)
-                .build();
-    }
+    @Transactional
+public GovernorateDetailResponse getGovernorateDetail(UUID id) {
+    GovernorateResponse governorate = getGovernorateById(id);
+    ClimateDataResponse currentWeather = climateDataService.getCurrentWeather(
+            id, governorate.getName(), governorate.getCenterLat(), governorate.getCenterLon());
+    List<ClimateForecastResponse> forecasts = climateDataService.getForecasts(
+            id, governorate.getName(), governorate.getCenterLat(), governorate.getCenterLon(), 7);
+    return GovernorateDetailResponse.builder()
+            .governorate(governorate)
+            .currentWeather(currentWeather)
+            .forecasts(forecasts)
+            .build();
+}
 
     public List<MapLayerResponse> getAllActiveLayers() {
         return mapLayerRepository.findByIsActiveTrueOrderByZIndex().stream()
