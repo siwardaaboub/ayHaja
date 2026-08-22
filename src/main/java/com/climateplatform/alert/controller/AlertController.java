@@ -1,6 +1,7 @@
 package com.climateplatform.alert.controller;
 
 import com.climateplatform.alert.domain.service.AlertService;
+import com.climateplatform.risk.domain.service.RiskAnalysisService;
 import com.climateplatform.alert.dto.request.CreateAlertRuleRequest;
 import com.climateplatform.alert.dto.request.CreateAlertSubscriptionRequest;
 import com.climateplatform.alert.dto.response.AlertRuleResponse;
@@ -23,6 +24,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class AlertController {
     private final AlertService alertService;
+        private final RiskAnalysisService riskAnalysisService;
 
     @GetMapping("/rules")
     public ResponseEntity<List<AlertRuleResponse>> getAllAlertRules() {
@@ -105,5 +107,10 @@ public class AlertController {
     public ResponseEntity<Map<String, Object>> getAlertStatistics() {
         Map<String, Object> statistics = alertService.getAlertStatistics();
         return ResponseEntity.ok(statistics);
+    }
+        @PostMapping("/trigger-test")
+    public ResponseEntity<Void> triggerAlertsTest() {
+        riskAnalysisService.triggerAlertsOnlyForToday();
+        return ResponseEntity.ok().build();
     }
 }

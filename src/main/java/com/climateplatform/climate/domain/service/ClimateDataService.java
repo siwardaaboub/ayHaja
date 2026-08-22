@@ -40,6 +40,7 @@ public class ClimateDataService {
     private final ClimateDataMapper climateDataMapper;
 
     @Cacheable(value = "current-weather", key = "#governorateId")
+    @Transactional
     public ClimateDataResponse getCurrentWeather(UUID governorateId, String governorateName,
                                                   BigDecimal latitude, BigDecimal longitude) {
         log.debug("Fetching current weather for governorate: {}", governorateName);
@@ -66,14 +67,17 @@ public class ClimateDataService {
                         BigDecimal.valueOf(response.getCurrent().getUvIndex()) : null)
                 .cloudCover(response.getCurrent().getCloudCover() != null ?
                         BigDecimal.valueOf(response.getCurrent().getCloudCover()) : null)
+                .precipitation(response.getCurrent().getPrecipitation() != null ?
+                        BigDecimal.valueOf(response.getCurrent().getPrecipitation()) : null)
                 .dataSource("Open-Meteo")
                 .build();
 
-        ClimateData savedData = climateDataRepository.save(climateData);
+        ClimateData savedData = climateDataRepository.saveAndFlush(climateData);
         return climateDataMapper.toResponse(savedData);
     }
 
     @Cacheable(value = "forecasts", key = "#governorateId + '_' + #days")
+    @Transactional
     public List<ClimateForecastResponse> getForecasts(UUID governorateId, String governorateName,
                                                        BigDecimal latitude, BigDecimal longitude, int days) {
         log.debug("Fetching {}-day forecast for governorate: {}", days, governorateName);
@@ -86,6 +90,7 @@ public class ClimateDataService {
         List<Double> tempMin = response.getDaily().getTemperatureMin();
         List<Double> precipitation = response.getDaily().getPrecipitationSum();
         List<Double> windSpeed = response.getDaily().getWindSpeedMax();
+        List<Integer> windDirection = response.getDaily().getWindDirectionDominant();
         List<Double> uvIndex = response.getDaily().getUvIndexMax();
 
         for (int i = 0; i < dates.size(); i++) {
@@ -97,6 +102,8 @@ public class ClimateDataService {
                     .temperatureMin(BigDecimal.valueOf(tempMin.get(i)))
                     .precipitation(BigDecimal.valueOf(precipitation.get(i)))
                     .windSpeed(BigDecimal.valueOf(windSpeed.get(i)))
+                    .windDirection(windDirection != null && windDirection.get(i) != null ?
+                            windDirection.get(i) : null)
                     .uvIndex(BigDecimal.valueOf(uvIndex.get(i)))
                     .confidence(BigDecimal.valueOf(0.85))
                     .dataSource("Open-Meteo")
@@ -107,7 +114,7 @@ public class ClimateDataService {
         climateForecastRepository.deleteByGovernorateIdAndForecastDateBefore(
                 governorateId, LocalDate.now().plusDays(days));
 
-        List<ClimateForecast> savedForecasts = climateForecastRepository.saveAll(forecasts);
+        List<ClimateForecast> savedForecasts = climateForecastRepository.saveAllAndFlush(forecasts);
         return savedForecasts.stream()
                 .map(climateDataMapper::toResponse)
                 .collect(Collectors.toList());

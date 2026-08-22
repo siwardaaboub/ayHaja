@@ -199,12 +199,14 @@ public class AlertService {
         log.debug("Processing climate data for governorate: {} with values: {}", governorateName, currentValues);
 
         List<AlertRule> activeRules = alertRuleRepository.findByIsActiveTrue();
+        log.info("Nombre de règles actives chargées: {}", activeRules.size());
 
         for (AlertRule rule : activeRules) {
             Double currentValue = currentValues.get(rule.getConditionField());
             if (currentValue == null) {
                 continue;
             }
+            log.info("Règle {} — champ={}, valeur actuelle={}, opérateur={}, seuil={}", rule.getRuleName(), rule.getConditionField(), currentValue, rule.getOperator(), rule.getThresholdValue());
 
             if (evaluateCondition(currentValue, rule.getOperator(), rule.getThresholdValue())) {
                 boolean hasRecentAlert = climateAlertRepository

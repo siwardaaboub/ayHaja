@@ -42,7 +42,7 @@ public class OpenMeteoClient {
             String url = UriComponentsBuilder.fromHttpUrl(BASE_URL)
                     .queryParam("latitude", latitude)
                     .queryParam("longitude", longitude)
-                    .queryParam("current", "temperature_2m,feels_like,relative_humidity_2m,pressure_msl,wind_speed_10m,wind_direction_10m,uv_index,cloud_cover")
+                    .queryParam("current", "temperature_2m,apparent_temperature,relative_humidity_2m,pressure_msl,wind_speed_10m,wind_direction_10m,uv_index,cloud_cover,precipitation")
                     .queryParam("timezone", "auto")
                     .toUriString();
 
@@ -64,7 +64,7 @@ public class OpenMeteoClient {
             String url = UriComponentsBuilder.fromHttpUrl(BASE_URL)
                     .queryParam("latitude", latitude)
                     .queryParam("longitude", longitude)
-                    .queryParam("daily", "temperature_2m_max,temperature_2m_min,precipitation_sum,wind_speed_10m_max,uv_index_max")
+                    .queryParam("daily", "temperature_2m_max,temperature_2m_min,precipitation_sum,wind_speed_10m_max,wind_direction_10m_dominant,uv_index_max")
                     .queryParam("forecast_days", days)
                     .queryParam("timezone", "auto")
                     .toUriString();
