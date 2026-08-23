@@ -79,4 +79,27 @@ public class ClimateDataController {
         List<ClimateDataResponse> response = climateDataService.getClimateDataByDate(date);
         return ResponseEntity.ok(response);
     }
+    @PostMapping("/historical/refresh")
+public ResponseEntity<String> refreshHistoricalData(
+        @RequestParam UUID governorateId,
+        @RequestParam String governorateName,
+        @RequestParam BigDecimal latitude,
+        @RequestParam BigDecimal longitude,
+        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+
+    climateDataService.refreshHistoricalData(
+            governorateId,
+            governorateName,
+            latitude,
+            longitude,
+            startDate,
+            endDate
+    );
+
+    return ResponseEntity.ok(
+            "Historical data refreshed successfully for " + governorateName
+                    + " from " + startDate + " to " + endDate
+    );
+}
 }

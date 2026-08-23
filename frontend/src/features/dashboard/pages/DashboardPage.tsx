@@ -3,13 +3,45 @@ import DashboardSummarySection from '../components/DashboardSummarySection';
 import RiskDistributionSection from '../components/RiskDistributionSection';
 import HealthTrendsSection from '../components/HealthTrendsSection';
 import LoadingSpinner from '../../../components/ui/LoadingSpinner';
+import TunisiaMap from '../../map/components/TunisiaMap';
+import GovernorateDetails from '../../map/components/GovernorateDetails';
 import { DashboardSummary, HealthTrend, RiskDistribution } from '../../../types';
 import { dashboardApi } from '../../../services/api';
+
+interface GovernorateDetail {
+  governorate: {
+    name: string;
+    nameAr?: string;
+    centerLat: number;
+    centerLon: number;
+  };
+  currentWeather: {
+    temperature?: number;
+    feelsLike?: number;
+    humidity?: number;
+    windSpeed?: number;
+    windDirection?: number;
+    pressure?: number;
+    uvIndex?: number;
+    precipitation?: number;
+    cloudCover?: number;
+  };
+  forecasts: Array<{
+    forecastDate: string;
+    temperatureMax?: number;
+    temperatureMin?: number;
+    precipitation?: number;
+    windSpeed?: number;
+    uvIndex?: number;
+  }>;
+}
 
 const DashboardPage: React.FC = () => {
   const [summary, setSummary] = useState<DashboardSummary | null>(null);
   const [riskDistribution, setRiskDistribution] = useState<RiskDistribution[]>([]);
   const [healthTrend, setHealthTrend] = useState<HealthTrend | null>(null);
+  const [selectedGovernorate, setSelectedGovernorate] =
+    useState<GovernorateDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -21,7 +53,7 @@ const DashboardPage: React.FC = () => {
 
         const [summaryData, riskData] = await Promise.all([
           dashboardApi.getDashboardSummary(),
-          dashboardApi.getRiskDistribution()
+          dashboardApi.getRiskDistribution(),
         ]);
 
         setSummary(summaryData);
@@ -29,7 +61,10 @@ const DashboardPage: React.FC = () => {
 
         if (riskData.length > 0) {
           const firstGovernorateId = riskData[0].governorateId;
-          const trendData = await dashboardApi.getHealthTrends(firstGovernorateId, 30);
+          const trendData = await dashboardApi.getHealthTrends(
+            firstGovernorateId,
+            30
+          );
           setHealthTrend(trendData);
         }
       } catch (err) {
@@ -71,7 +106,9 @@ const DashboardPage: React.FC = () => {
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Climate Health Dashboard</h1>
+          <h1 className="text-3xl font-bold text-gray-900">
+            Climate Health Dashboard
+          </h1>
           <p className="text-gray-600 mt-2">
             Real-time monitoring of climate-related health risks across Tunisia
           </p>
@@ -79,7 +116,17 @@ const DashboardPage: React.FC = () => {
 
         {summary && <DashboardSummarySection summary={summary} />}
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+        <div className="mt-8">
+          <TunisiaMap
+            onGovernorateSelected={setSelectedGovernorate}
+          />
+        </div>
+
+        <div className="mt-8">
+          <GovernorateDetails detail={selectedGovernorate} />
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8 mt-8">
           <RiskDistributionSection data={riskDistribution} />
           <HealthTrendsSection trend={healthTrend} loading={false} />
         </div>
