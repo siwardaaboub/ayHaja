@@ -8,93 +8,237 @@ interface AlertCardProps {
   onResolve: (id: string) => void;
 }
 
-const AlertCard: React.FC<AlertCardProps> = ({ alert, onAcknowledge, onResolve }) => {
-  const getAlertTypeIcon = (type: string) => {
-    switch (type) {
-      case 'HEATWAVE': return '🌡️';
-      case 'DROUGHT': return '🏜️';
-      case 'FIRE': return '🔥';
-      case 'STORM': return '⛈️';
-      case 'FLOOD': return '🌊';
-      case 'AIR_QUALITY': return '💨';
-      default: return '⚠️';
+const AlertCard: React.FC<AlertCardProps> = ({
+  alert,
+  onAcknowledge,
+  onResolve,
+}) => {
+
+  const getSeverityBorder = () => {
+    switch (alert.severity) {
+      case 'CRITICAL':
+        return 'border-l-red-500';
+      case 'HIGH':
+        return 'border-l-orange-500';
+      case 'MEDIUM':
+        return 'border-l-yellow-500';
+      case 'LOW':
+      default:
+        return 'border-l-green-500';
     }
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleString();
+    if (!dateString) {
+      return '—';
+    }
+
+    const date = new Date(dateString);
+
+    if (Number.isNaN(date.getTime())) {
+      return '—';
+    }
+
+    return date.toLocaleString('en-GB', {
+      dateStyle: 'medium',
+      timeStyle: 'short',
+    });
   };
 
   return (
-    <div className={`bg-white rounded-xl shadow-md p-6 border-l-4 ${
-      alert.severity === 'CRITICAL' ? 'border-red-500' :
-      alert.severity === 'HIGH' ? 'border-orange-500' :
-      alert.severity === 'MEDIUM' ? 'border-yellow-500' :
-      'border-green-500'
-    } ${alert.isResolved ? 'opacity-60' : ''}`}>
-      <div className="flex items-start justify-between">
-        <div className="flex-1">
-          <div className="flex items-center space-x-3 mb-3">
-            <span className="text-2xl">{getAlertTypeIcon(alert.alertType)}</span>
-            <h3 className="text-lg font-bold text-gray-900">{alert.title}</h3>
-            <RiskBadge level={alert.severity} size="sm" />
+    <article
+      className={`
+        bg-white
+        rounded-xl
+        shadow-sm
+        border
+        border-gray-100
+        border-l-4
+        ${getSeverityBorder()}
+        overflow-hidden
+        transition-all
+        duration-200
+        hover:shadow-md
+        ${alert.isResolved ? 'opacity-75' : ''}
+      `}
+    >
+      <div className="p-5 sm:p-6">
+
+        {/* Header */}
+        <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-5">
+
+          <div className="min-w-0 flex-1">
+
+            <div className="flex flex-wrap items-center gap-3">
+
+
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900 break-words">
+                {alert.title}
+              </h3>
+
+              <RiskBadge
+                level={alert.severity}
+                size="sm"
+              />
+
+              {alert.isResolved && (
+                <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700">
+                  Resolved
+                </span>
+              )}
+
+            </div>
+
+            {/* Description */}
+            {alert.description && (
+              <p className="mt-4 text-sm sm:text-base text-gray-600 leading-relaxed">
+                {alert.description}
+              </p>
+            )}
+
           </div>
 
-          <p className="text-gray-700 mb-3">{alert.description}</p>
+          {/* Actions */}
+          <div className="flex flex-wrap lg:flex-col gap-2 lg:min-w-[120px]">
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4 text-sm">
-            <div>
-              <span className="text-gray-500">Governorate:</span>
-              <span className="font-medium">{alert.governorName}</span>
-            </div>
-            <div>
-              <span className="text-gray-500">Current:</span>
-              <span className="font-medium">{alert.currentValue?.toFixed(1)}</span>
-            </div>
-            <div>
-              <span className="text-gray-500">Threshold:</span>
-              <span className="font-medium">{alert.thresholdValue?.toFixed(1)}</span>
-            </div>
-            <div>
-              <span className="text-gray-500">Triggered:</span>
-              <span className="font-medium">{formatDate(alert.triggeredAt)}</span>
-            </div>
+            {!alert.isResolved && !alert.isAcknowledged && (
+              <button
+                type="button"
+                onClick={() => onAcknowledge(alert.id)}
+                className="
+                  inline-flex
+                  items-center
+                  justify-center
+                  px-3
+                  py-2
+                  rounded-lg
+                  bg-blue-50
+                  text-blue-700
+                  border
+                  border-blue-100
+                  text-sm
+                  font-medium
+                  hover:bg-blue-100
+                  focus:outline-none
+                  focus:ring-2
+                  focus:ring-blue-500
+                  transition-colors
+                "
+              >
+                Acknowledge
+              </button>
+            )}
+
+            {!alert.isResolved && (
+              <button
+                type="button"
+                onClick={() => onResolve(alert.id)}
+                className="
+                  inline-flex
+                  items-center
+                  justify-center
+                  px-3
+                  py-2
+                  rounded-lg
+                  bg-green-50
+                  text-green-700
+                  border
+                  border-green-100
+                  text-sm
+                  font-medium
+                  hover:bg-green-100
+                  focus:outline-none
+                  focus:ring-2
+                  focus:ring-green-500
+                  transition-colors
+                "
+              >
+                Resolve
+              </button>
+            )}
+
+            {alert.isAcknowledged && !alert.isResolved && (
+              <span className="inline-flex items-center justify-center px-3 py-2 rounded-lg bg-gray-100 text-gray-600 text-sm font-medium">
+                ✓ Acknowledged
+              </span>
+            )}
+
+          </div>
+        </div>
+
+        {/* Alert details */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-6 pt-5 border-t border-gray-100">
+
+          <div className="min-w-0">
+            <p className="text-xs font-medium uppercase tracking-wide text-gray-400">
+              Governorate
+            </p>
+
+            <p className="mt-1 text-sm font-semibold text-gray-800 truncate">
+              {alert.governorateName || '—'}
+            </p>
           </div>
 
-          {alert.healthRecommendations && (
-            <div className="bg-blue-50 rounded-lg p-4 mb-4">
-              <h4 className="font-semibold text-blue-900 mb-2">Health Recommendations:</h4>
-              <p className="text-blue-800">{alert.healthRecommendations}</p>
-            </div>
-          )}
+          <div>
+            <p className="text-xs font-medium uppercase tracking-wide text-gray-400">
+              Current
+            </p>
+
+            <p className="mt-1 text-sm font-semibold text-gray-800">
+              {typeof alert.currentValue === 'number'
+                ? alert.currentValue.toFixed(1)
+                : '—'}
+            </p>
+          </div>
+
+          <div>
+            <p className="text-xs font-medium uppercase tracking-wide text-gray-400">
+              Threshold
+            </p>
+
+            <p className="mt-1 text-sm font-semibold text-gray-800">
+              {typeof alert.thresholdValue === 'number'
+                ? alert.thresholdValue.toFixed(1)
+                : '—'}
+            </p>
+          </div>
+
+          <div className="min-w-0">
+            <p className="text-xs font-medium uppercase tracking-wide text-gray-400">
+              Triggered
+            </p>
+
+            <p className="mt-1 text-sm font-semibold text-gray-800">
+              {formatDate(alert.triggeredAt)}
+            </p>
+          </div>
+
         </div>
 
-        <div className="flex flex-col space-y-2 ml-4">
-          {!alert.isAcknowledged && !alert.isResolved && (
-            <button
-              onClick={() => onAcknowledge(alert.id)}
-              className="px-3 py-1 bg-blue-100 text-blue-800 rounded-lg hover:bg-blue-200 transition-colors text-sm"
-            >
-              Acknowledge
-            </button>
-          )}
-          {!alert.isResolved && (
-            <button
-              onClick={() => onResolve(alert.id)}
-              className="px-3 py-1 bg-green-100 text-green-800 rounded-lg hover:bg-green-200 transition-colors text-sm"
-            >
-              Resolve
-            </button>
-          )}
-          {alert.isAcknowledged && (
-            <span className="text-xs text-gray-500">Acknowledged</span>
-          )}
-          {alert.isResolved && (
-            <span className="text-xs text-gray-500">Resolved</span>
-          )}
-        </div>
+        {/* Health recommendation */}
+        {alert.healthRecommendations && (
+          <div className="mt-5 rounded-lg bg-blue-50 border border-blue-100 p-4">
+
+            <h4 className="text-sm font-semibold text-blue-900 mb-1.5">
+              Health Recommendation
+            </h4>
+
+            <p className="text-sm text-blue-800 leading-relaxed">
+              {alert.healthRecommendations}
+            </p>
+
+          </div>
+        )}
+
+        {/* Resolved information */}
+        {alert.isResolved && alert.resolvedAt && (
+          <div className="mt-4 text-xs text-gray-500">
+            Resolved on {formatDate(alert.resolvedAt)}
+          </div>
+        )}
+
       </div>
-    </div>
+    </article>
   );
 };
 

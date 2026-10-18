@@ -97,13 +97,25 @@ public class AlertService {
         alertRuleRepository.save(rule);
     }
 
+    public List<ClimateAlertResponse> getAllAlerts() {
+    return climateAlertRepository.findAllByOrderByTriggeredAtDesc()
+            .stream()
+            .map(ClimateAlertResponse::from)
+            .collect(Collectors.toList());
+}
+
     @Cacheable("active-alerts")
-    public List<ClimateAlertResponse> getActiveAlerts() {
-        List<ClimateAlert> alerts = climateAlertRepository.findActiveAlerts(LocalDateTime.now());
-        return alerts.stream()
-                .map(ClimateAlertResponse::from)
-                .collect(Collectors.toList());
-    }
+public List<ClimateAlertResponse> getActiveAlerts() {
+    List<ClimateAlert> alerts =
+            climateAlertRepository.findAllByOrderByTriggeredAtDesc()
+                    .stream()
+                    .filter(alert -> !Boolean.TRUE.equals(alert.getIsResolved()))
+                    .toList();
+
+    return alerts.stream()
+            .map(ClimateAlertResponse::from)
+            .collect(Collectors.toList());
+}
 
     @Cacheable("alerts-by-governorate")
     public List<ClimateAlertResponse> getAlertsByGovernorate(UUID governorateId) {
@@ -118,8 +130,9 @@ public class AlertService {
         return alerts.map(ClimateAlertResponse::from);
     }
 
-    @Transactional
-    public ClimateAlertResponse acknowledgeAlert(UUID alertId) {
+   @Transactional
+@CacheEvict(value = {"active-alerts", "alert-statistics", "alerts-by-governorate"}, allEntries = true)
+public ClimateAlertResponse acknowledgeAlert(UUID alertId) {
         ClimateAlert alert = climateAlertRepository.findById(alertId)
                 .orElseThrow(() -> new ResourceNotFoundException("ClimateAlert", "id", alertId));
 
@@ -130,7 +143,8 @@ public class AlertService {
     }
 
     @Transactional
-    public ClimateAlertResponse resolveAlert(UUID alertId) {
+@CacheEvict(value = {"active-alerts", "alert-statistics", "alerts-by-governorate"}, allEntries = true)
+public ClimateAlertResponse resolveAlert(UUID alertId) {
         ClimateAlert alert = climateAlertRepository.findById(alertId)
                 .orElseThrow(() -> new ResourceNotFoundException("ClimateAlert", "id", alertId));
 
@@ -166,36 +180,47 @@ public class AlertService {
         return toResponse(savedSubscription);
     }
 
-    @Cacheable("alert-statistics")
     public Map<String, Object> getAlertStatistics() {
-        long totalAlerts = climateAlertRepository.count();
-        long activeAlerts = climateAlertRepository.countActiveAlerts(LocalDateTime.now());
-        long resolvedAlerts = totalAlerts - activeAlerts;
+    List<ClimateAlert> allAlerts =
+            climateAlertRepository.findAllByOrderByTriggeredAtDesc();
 
-        Map<AlertRule.AlertType, Long> alertsByType = climateAlertRepository.findActiveAlerts(LocalDateTime.now()).stream()
-                .collect(Collectors.groupingBy(
-                        ClimateAlert::getAlertType,
-                        Collectors.counting()
-                ));
+    long totalAlerts = allAlerts.size();
 
-        Map<AlertRule.Severity, Long> alertsBySeverity = climateAlertRepository.findActiveAlerts(LocalDateTime.now()).stream()
-                .collect(Collectors.groupingBy(
-                        ClimateAlert::getSeverity,
-                        Collectors.counting()
-                ));
+    List<ClimateAlert> activeAlerts = allAlerts.stream()
+            .filter(alert -> !Boolean.TRUE.equals(alert.getIsResolved()))
+            .toList();
 
-        return Map.of(
-                "totalAlerts", totalAlerts,
-                "activeAlerts", activeAlerts,
-                "resolvedAlerts", resolvedAlerts,
-                "alertsByType", alertsByType,
-                "alertsBySeverity", alertsBySeverity
-        );
-    }
+    long activeCount = activeAlerts.size();
+    long resolvedCount = totalAlerts - activeCount;
 
+    Map<AlertRule.AlertType, Long> alertsByType =
+            activeAlerts.stream()
+                    .collect(Collectors.groupingBy(
+                            ClimateAlert::getAlertType,
+                            Collectors.counting()
+                    ));
+
+    Map<AlertRule.Severity, Long> alertsBySeverity =
+            activeAlerts.stream()
+                    .collect(Collectors.groupingBy(
+                            ClimateAlert::getSeverity,
+                            Collectors.counting()
+                    ));
+
+    return Map.of(
+            "totalAlerts", totalAlerts,
+            "activeAlerts", activeCount,
+            "resolvedAlerts", resolvedCount,
+            "alertsByType", alertsByType,
+            "alertsBySeverity", alertsBySeverity
+    );
+}
     @Transactional
-    public void processClimateDataAndGenerateAlerts(UUID governorateId, String governorateName,
-                                                     Map<String, Double> currentValues) {
+@CacheEvict(value = {"active-alerts", "alert-statistics", "alerts-by-governorate"}, allEntries = true)
+public void processClimateDataAndGenerateAlerts(
+        UUID governorateId,
+        String governorateName,
+        Map<String, Double> currentValues) {
         log.debug("Processing climate data for governorate: {} with values: {}", governorateName, currentValues);
 
         List<AlertRule> activeRules = alertRuleRepository.findByIsActiveTrue();
@@ -253,22 +278,40 @@ public class AlertService {
                 .build();
     }
 
-    private String generateAlertTitle(AlertRule.AlertType alertType, Double value) {
-        return switch (alertType) {
-            case HEATWAVE -> String.format("Heatwave Alert - Temperature: %.1f°C", value);
-            case DROUGHT -> String.format("Drought Alert - Dryness Level: %.1f", value);
-            case FIRE -> String.format("Fire Risk Alert - Risk Level: %.1f", value);
-            case STORM -> String.format("Storm Alert - Wind Speed: %.1f m/s", value);
-            case FLOOD -> String.format("Flood Alert - Precipitation: %.1f mm", value);
-            case AIR_QUALITY -> String.format("Air Quality Alert - AQI: %.1f", value);
-        };
-    }
+private String generateAlertTitle(AlertRule.AlertType alertType, Double value) {
 
-    private String generateAlertDescription(AlertRule rule, Double value) {
-        return String.format("Alert triggered by %s condition: %s %s %.1f. Current value: %.1f",
-                rule.getConditionField(), rule.getOperator(), rule.getThresholdValue(), value);
-    }
+    double numericValue = value != null ? value : 0.0;
 
+    return switch (alertType) {
+        case HEATWAVE ->
+                String.format("Heatwave Alert - Temperature: %.1f°C", numericValue);
+
+        case DROUGHT ->
+                String.format("Drought Alert - Dryness Level: %.1f", numericValue);
+
+        case FIRE ->
+                String.format("Fire Risk Alert - Risk Level: %.1f", numericValue);
+
+        case STORM ->
+                String.format("Storm Alert - Wind Speed: %.1f m/s", numericValue);
+
+        case FLOOD ->
+                String.format("Flood Alert - Precipitation: %.1f mm", numericValue);
+
+        case AIR_QUALITY ->
+                String.format("Air Quality Alert - AQI: %.1f", numericValue);
+    };
+}
+
+private String generateAlertDescription(AlertRule rule, Double value) {
+    return String.format(
+            "Alert triggered by %s condition: %s %.1f. Current value: %.1f",
+            rule.getConditionField(),
+            rule.getOperator(),
+            rule.getThresholdValue(),
+            value
+    );
+}
     private String generateHealthRecommendations(AlertRule.AlertType alertType) {
         return switch (alertType) {
             case HEATWAVE -> "Avoid outdoor activities during peak heat hours (12h-16h). Stay hydrated and wear light clothing.";

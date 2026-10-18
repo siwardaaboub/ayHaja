@@ -59,6 +59,8 @@ export const adminApi = {
     return response.data;
   },
 
+  
+
   getAllAlertRules: async (): Promise<AlertRule[]> => {
     const response = await apiClient.get<AlertRule[]>('/alerts/rules');
     return response.data;

@@ -58,6 +58,12 @@ public class AlertController {
         return ResponseEntity.noContent().build();
     }
 
+    @GetMapping("/all")
+public ResponseEntity<List<ClimateAlertResponse>> getAllAlerts() {
+    List<ClimateAlertResponse> alerts = alertService.getAllAlerts();
+    return ResponseEntity.ok(alerts);
+}
+
     @GetMapping("/active")
     public ResponseEntity<List<ClimateAlertResponse>> getActiveAlerts() {
         List<ClimateAlertResponse> alerts = alertService.getActiveAlerts();

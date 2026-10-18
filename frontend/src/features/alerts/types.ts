@@ -1,30 +1,26 @@
-import { AlertRule, ClimateAlert, AlertSubscription } from '../../types';
+export type AlertType =
+  | 'HEATWAVE'
+  | 'DROUGHT'
+  | 'FIRE'
+  | 'STORM'
+  | 'FLOOD'
+  | 'AIR_QUALITY';
 
-export interface AlertType {
-  HEATWAVE: 'HEATWAVE';
-  DROUGHT: 'DROUGHT';
-  FIRE: 'FIRE';
-  STORM: 'STORM';
-  FLOOD: 'FLOOD';
-  AIR_QUALITY: 'AIR_QUALITY';
-}
-
-export interface Severity {
-  LOW: 'LOW';
-  MEDIUM: 'MEDIUM';
-  HIGH: 'HIGH';
-  CRITICAL: 'CRITICAL';
-}
+export type Severity =
+  | 'LOW'
+  | 'MEDIUM'
+  | 'HIGH'
+  | 'CRITICAL';
 
 export interface AlertRule {
   id: string;
   ruleName: string;
-  alertType: AlertType[keyof AlertType];
+  alertType: AlertType;
   conditionField: string;
   operator: string;
   thresholdValue: number;
   durationMinutes: number;
-  severity: Severity[keyof Severity];
+  severity: Severity;
   isActive: boolean;
   cooldownMinutes: number;
   createdAt: string;
@@ -35,8 +31,8 @@ export interface ClimateAlert {
   id: string;
   governorateId: string;
   governorateName: string;
-  alertType: AlertType[keyof AlertType];
-  severity: Severity[keyof Severity];
+  alertType: AlertType;
+  severity: Severity;
   title: string;
   description: string;
   currentValue: number;
@@ -46,7 +42,7 @@ export interface ClimateAlert {
   isAcknowledged: boolean;
   isResolved: boolean;
   resolvedAt: string | null;
-  healthRecommendations: string;
+  healthRecommendations: string | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -55,8 +51,8 @@ export interface AlertSubscription {
   id: string;
   userId: string;
   governorateId: string | null;
-  alertType: AlertType[keyof AlertType];
-  minSeverity: Severity[keyof Severity];
+  alertType: AlertType;
+  minSeverity: Severity;
   isActive: boolean;
   notificationMethod: string;
   createdAt: string;

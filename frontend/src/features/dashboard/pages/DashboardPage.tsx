@@ -116,20 +116,23 @@ const DashboardPage: React.FC = () => {
 
         {summary && <DashboardSummarySection summary={summary} />}
 
-        <div className="mt-8">
-          <TunisiaMap
-            onGovernorateSelected={setSelectedGovernorate}
-          />
-        </div>
+       <div id="governorates-map" className="mt-8">
+  <TunisiaMap
+    onGovernorateSelected={setSelectedGovernorate}
+  />
+</div>
 
         <div className="mt-8">
           <GovernorateDetails detail={selectedGovernorate} />
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8 mt-8">
-          <RiskDistributionSection data={riskDistribution} />
-          <HealthTrendsSection trend={healthTrend} loading={false} />
-        </div>
+        <div
+  id="risk-distribution"
+  className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8 mt-8"
+>
+  <RiskDistributionSection data={riskDistribution} />
+  <HealthTrendsSection trend={healthTrend} loading={false} />
+</div>
       </div>
     </div>
   );

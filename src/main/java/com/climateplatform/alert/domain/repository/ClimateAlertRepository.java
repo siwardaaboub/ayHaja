@@ -14,7 +14,9 @@ import java.util.UUID;
 
 @Repository
 public interface ClimateAlertRepository extends JpaRepository<ClimateAlert, UUID> {
-    List<ClimateAlert> findByGovernorateIdAndIsResolvedFalseOrderByTriggeredAtDesc(UUID governorateId);
+    List<ClimateAlert> findAllByOrderByTriggeredAtDesc();
+    List<ClimateAlert> 
+    findByGovernorateIdAndIsResolvedFalseOrderByTriggeredAtDesc(UUID governorateId);
 
     List<ClimateAlert> findByIsResolvedFalseOrderByTriggeredAtDesc();
 
